@@ -39,6 +39,7 @@ module.exports = {
     'keyword-spacing':0,
     'space-in-parens':0,
     'eqeqeq':0,
-    'comma-spacing':0
+    'comma-spacing':0,
+    'frequire-v-for-key':0
   }
 }

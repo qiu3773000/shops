@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Header :seller="seller" :arr="arr"></Header>
+    <Header :seller="seller"></Header>
     <div class="tab border-1px">
         <div class="tab-item">
             <router-link to="/goods" >商品</router-link>
@@ -25,7 +25,7 @@
       data(){
           return {
               seller: {},
-              arr:1,
+              goods:{},
           }
       },
       created(){
