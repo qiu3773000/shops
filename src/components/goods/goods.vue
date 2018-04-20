@@ -1,6 +1,6 @@
 <template>
   <div class="goods">
-    <div class="menu-wrapper">
+    <div class="menu-wrapper" ref="menuWapper">
       <ul>
         <li v-for="item in goods" class="menu-item">
           <span class="text border-1px">
@@ -9,9 +9,9 @@
         </li>
       </ul>
     </div>
-    <div class="foods-wrapper">
+    <div class="foods-wrapper" ref="foodWapper">
       <ul>
-        <li v-for="item in goods" class="food-list">
+        <li v-for="item in goods" class="food-list food-list-hook">
           <h1 class="food-title">{{item.name}}</h1>
           <ul>
             <li v-for="food in item.foods" class="food-item border-1px">
@@ -22,7 +22,7 @@
                 <h2 class="name">{{food.name}}</h2>
                 <p class="desc">{{food.description}}</p>
                 <div class="extra">
-                  <span>月售{{food.sellCount}}份</span>
+                  <span class="count">月售{{food.sellCount}}份</span>
                   <span>好评率{{food.rating}}%</span>
                 </div>
                 <div class="price">
@@ -40,18 +40,42 @@
 
 <script>
   import icon from '../../components/icon/icon.vue'
+  import BTscroll from 'better-scroll'
   export default{
     data(){
       return {
-        goods:[]
+        goods:[],
+        listHeight:[]
       }
     },
     created(){
       this.$api.get('/api/goods', null, r => {
         //console.log(r)
         this.goods = r.data
-      console.log(this.goods)
+        console.log(this.goods)
+      //
+        this.$nextTick(()=>{
+          this.__initScroll()
+          this.__calculateHeight()
+        })
     })
+    },
+    methods:{
+      __initScroll(){
+        this.menuScroll=new BTscroll(this.$refs.menuWapper,{})
+        this.foodScroll=new BTscroll(this.$refs.foodWapper,{})
+      },
+      __calculateHeight(){
+        let foodList=this.$refs.foodWapper.getElementsByClassName('food-list-hook')
+        let height=0
+        this.listHeight.push(height);
+        for (let i=0;i<foodList.length;i++){
+          let item=foodList[i]
+          height+=item.clientHeight
+          this.listHeight.push(height);
+        }
+        //console.log(foodList[0].clientHeight)
+      }
     },
     components:{
       icon
@@ -121,8 +145,9 @@
             color rgb(147,153,159)
           .desc
             margin-bottom :8px
+            line-height 14px
           .extra
-            &.count
+            .count
               margin-right :12px
           .price
             font-weight 700
